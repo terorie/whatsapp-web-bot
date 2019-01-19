@@ -100,13 +100,6 @@
 		return false;
 	}
 
-	// Call the main function again
-	const goAgain = (fn, sec) => {
-		// const chat = document.querySelector('div.chat:not(.unread)')
-		// selectChat(chat)
-		setTimeout(fn, sec * 1000)
-	}
-
 	// Dispath an event (of click, por instance)
 	const eventFire = (el, etype) => {
 		var evt = document.createEvent("MouseEvents");
@@ -178,14 +171,14 @@
 			} else {
 				lastMsg = lastMessageOnChat;
 			}
-		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false && !didYouSendLastMsg()){
+		} else if (lastMessageOnChat != getLastMsg() && getLastMsg() !== false/* && !didYouSendLastMsg()*/){
 			lastMessageOnChat = lastMsg = getLastMsg();
 			processLastMsgOnChat = true;
 		}
 		
 		if (!processLastMsgOnChat && (chats.length == 0 || !chat)) {
 			console.log(new Date(), 'nothing to do now... (1)', chats.length, chat);
-			return goAgain(start, 3);
+			return window.setTimeout(start, 3000);
 		}
 
 		// get infos
@@ -199,50 +192,39 @@
 		// avoid sending duplicate messaegs
 		if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
 			console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
-			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
+			return window.setTimeout(() => { start(chats, cnt + 1) }, 100);
 		}
 
 		// what to answer back?
 		let sendText
 
-		if (lastMsg.toUpperCase().indexOf('@HELP') > -1){
-			sendText = `
-				Cool ${title}! Some commands that you can send me:
-
-				1. *@TIME*
-				2. *@JOKE*`
+		if (lastMsg.startsWith("!help ")) {
+			sendText = `${title}: *@TIME*`
 		}
 
-		if (lastMsg.toUpperCase().indexOf('@TIME') > -1){
-			sendText = `
-				Don't you have a clock, dude?
-
-				*${new Date()}*`
-		}
-
-		if (lastMsg.toUpperCase().indexOf('@JOKE') > -1){
-			sendText = jokeList[rand(jokeList.length - 1)];
+		if (lastMsg.startsWith('!time ')) {
+			sendText = `*${new Date()}*`
 		}
 		
-		// that's sad, there's not to send back...
+		// not a bot command
 		if (!sendText) {
 			ignoreLastMsg[title] = lastMsg;
-			console.log(new Date(), 'new message ignored -> ', title, lastMsg);
-			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
+			//console.log(new Date(), 'new message ignored -> ', title, lastMsg);
+			return window.setTimeout(() => { start(chats, cnt + 1) }, 100);
 		}
 
-		console.log(new Date(), 'new message to process, uhull -> ', title, lastMsg);
+		console.log(new Date(), 'new message to process -> ', title, lastMsg);
 
 		// select chat and send message
 		if (!processLastMsgOnChat){
 			selectChat(chat, () => {
 				sendMessage(chat, sendText.trim(), () => {
-					goAgain(() => { start(chats, cnt + 1) }, 1);
+					window.setTimeout(() => { start(chats, cnt + 1) }, 1000);
 				});
 			})
 		} else {
 			sendMessage(null, sendText.trim(), () => {
-				goAgain(() => { start(chats, cnt + 1) }, 1);
+				window.setTimeout(() => { start(chats, cnt + 1) }, 1000);
 			});
 		}
 	}
