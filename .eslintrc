@@ -14,7 +14,8 @@
       "new-cap": [2, {
         "newIsCapExceptions": ["instance", "command_profile", "fileConfig.file",
           "CodeMirror.fold.combine"]
-      }]
+      }],
+      "no-var": "error"
     },
     "env": {
       "browser": true,

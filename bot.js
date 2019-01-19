@@ -11,9 +11,9 @@
 	//
 	// GLOBAL VARS AND CONFIGS
 	//
-	var lastMessageOnChat = false;
-	var ignoreLastMsg = {};
-	var elementConfig = {
+	let lastMessageOnChat = false;
+	let ignoreLastMsg = {};
+	const elementConfig = {
 		"chats": [1, 0, 5, 2, 0, 3, 0, 0, 0],
 		"chat_icons": [0, 0, 1, 1, 1, 0],
 		"chat_title": [0, 0, 1, 0, 0, 0, 0],
@@ -31,8 +31,8 @@
 		if (!elementConfig[id]){
 			return false;
 		}
-		var elem = !parent ? document.body : parent;
-		var elementArr = elementConfig[id];
+		let elem = !parent ? document.body : parent;
+		const elementArr = elementConfig[id];
 		elementArr.forEach(function(pos) {
 			if (!elem.childNodes[pos]){
 				return false;
@@ -43,8 +43,8 @@
 	}
 	
 	function getLastMsg(){
-		var messages = document.querySelectorAll('.msg');
-		var pos = messages.length-1;
+		const messages = document.querySelectorAll('.msg');
+		let pos = messages.length-1;
 		
 		while (messages[pos] && (messages[pos].classList.contains('msg-system') || messages[pos].querySelector('.message-in'))){
 			pos--;
@@ -60,19 +60,19 @@
 	}
 	
 	function getUnreadChats(){
-		var unreadchats = [];
-		var chats = getElement("chats");
+		const unreadchats = [];
+		let chats = getElement("chats");
 		if (chats){
 			chats = chats.childNodes;
-			for (var i in chats){
+			for (const i in chats){
 				if (!(chats[i] instanceof Element)){
 					continue;
 				}
-				var icons = getElement("chat_icons", chats[i]).childNodes;
+				const icons = getElement("chat_icons", chats[i]).childNodes;
 				if (!icons){
 					continue;
 				}
-				for (var j in icons){
+				for (const j in icons){
 					if (icons[j] instanceof Element){
 						if (!(icons[j].childNodes[0].getAttribute('data-icon') == 'muted' || icons[j].childNodes[0].getAttribute('data-icon') == 'pinned')){
 							unreadchats.push(chats[i]);
@@ -86,11 +86,11 @@
 	}
 	
 	function didYouSendLastMsg(){
-		var messages = document.querySelectorAll('.msg');
+		const messages = document.querySelectorAll('.msg');
 		if (messages.length <= 0){
 			return false;
 		}
-		var pos = messages.length-1;
+		let pos = messages.length-1;
 		
 		while (messages[pos] && messages[pos].classList.contains('msg-system')){
 			pos--;
@@ -106,7 +106,7 @@
 
 	// Dispath an event (of click, por instance)
 	const eventFire = (el, etype) => {
-		var evt = document.createEvent("MouseEvents");
+		const evt = document.createEvent("MouseEvents");
 		evt.initMouseEvent(etype, true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
 		el.dispatchEvent(evt);
 	}
@@ -133,7 +133,7 @@
 	// Send a message
 	const sendMessage = (chat, message, cb) => {
 		// avoid duplicate sending
-		var title;
+		let title;
 
 		if (chat){
 			title = getElement("chat_title",chat).title;
@@ -166,8 +166,8 @@
 		const chats = _chats || getUnreadChats();
 		const chat = chats[cnt];
 		
-		var processLastMsgOnChat = false;
-		var lastMsg;
+		let processLastMsgOnChat = false;
+		let lastMsg;
 		
 		if (!lastMessageOnChat){
 			if (false === (lastMessageOnChat = getLastMsg())){
@@ -186,7 +186,7 @@
 		}
 
 		// get infos
-		var title;
+		let title;
 		if (!processLastMsgOnChat){
 			title = getElement("chat_title",chat).title + '';
 			lastMsg = (getElement("chat_lastmsg", chat) || { innerText: '' }).innerText.trim(); //.last-msg returns null when some user is typing a message to me
