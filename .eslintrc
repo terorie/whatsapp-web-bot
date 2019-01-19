@@ -1,0 +1,39 @@
+{
+    "extends": ["eslint:recommended"],
+    "parserOptions": {
+      "ecmaVersion": 2017
+    },
+    "rules": {
+      "no-unused-vars": [2, {
+        "args": "after-used",
+        "argsIgnorePattern": "^opt_",
+        "varsIgnorePattern":"_unused$"
+      }],
+      "no-console": 0,
+      "camelcase": [0, {"properties": "never"}],
+      "new-cap": [2, {
+        "newIsCapExceptions": ["instance", "command_profile", "fileConfig.file",
+          "CodeMirror.fold.combine"]
+      }]
+    },
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "globals": {
+      "Blockly": true,
+      "CodeMirror": true,
+      "ENABLE_LOGGING": true,
+      "Locales": true,
+      "Shepherd": true,
+      "Sk": true,
+      "brython": true,
+      "chrome": true,
+      "cwc": true,
+      "goog": true,
+      "i18t": true,
+      "marked": true,
+      "soydata": true,
+      "window": true
+    }
+  }
