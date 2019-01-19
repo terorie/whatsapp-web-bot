@@ -1,4 +1,13 @@
 (() => {
+	const commands = {
+		"!time": env => {
+			return `*${new Date()}*`
+		},
+		"!help": env => {
+			return `Chat ${env.chat}: *!time*`
+		}
+	};
+
 	//
 	// GLOBAL VARS AND CONFIGS
 	//
@@ -196,18 +205,22 @@
 		}
 
 		// what to answer back?
-		let sendText
+		let chatFn
 
-		if (lastMsg.startsWith("!help ")) {
-			sendText = `${title}: *@TIME*`
-		}
-
-		if (lastMsg.startsWith('!time ')) {
-			sendText = `*${new Date()}*`
+		for (key in Object.keys(commands)) {
+			if (lastMsg.startsWith(key)) {
+				chatFn = commands[key];
+				break;
+			}
 		}
 		
-		// not a bot command
-		if (!sendText) {
+		let sendText;
+
+		if (!chatFn) {
+			sendText = chatFn({
+				chat: title,
+			})
+		} else {
 			ignoreLastMsg[title] = lastMsg;
 			//console.log(new Date(), 'new message ignored -> ', title, lastMsg);
 			return window.setTimeout(() => { start(chats, cnt + 1) }, 100);
