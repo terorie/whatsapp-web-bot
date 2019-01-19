@@ -1,10 +1,10 @@
 (() => {
 	const commands = {
 		"!time": opt_ => {
-			return `*${new Date()}*`
+			return `*${new Date()}*`;
 		},
 		"!help": env => {
-			return `Chat ${env.chat}: *!time*`
+			return `Chat ${env.chat}: *!time*`;
 		}
 	};
 
@@ -109,7 +109,7 @@
 		const evt = document.createEvent("MouseEvents");
 		evt.initMouseEvent(etype, true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
 		el.dispatchEvent(evt);
-	}
+	};
 
 	// Select a chat to show the main box
 	const selectChat = (chat, cb) => {
@@ -125,10 +125,10 @@
 				}
 				return cb();
 			}, 300);
-		}
+		};
 
 		loopFewTimes();
-	}
+	};
 
 	// Send a message
 	const sendMessage = (chat, message, cb) => {
@@ -156,7 +156,7 @@
 		eventFire(document.querySelector('span[data-icon="send"]'), 'click');
 
 		cb();
-	}
+	};
 
 	//
 	// MAIN LOGIC
@@ -196,11 +196,11 @@
 		// avoid sending duplicate messaegs
 		if (ignoreLastMsg[title] && (ignoreLastMsg[title]) == lastMsg) {
 			console.log(new Date(), 'nothing to do now... (2)', title, lastMsg);
-			return window.setTimeout(() => { start(chats, cnt + 1) }, 100);
+			return window.setTimeout(() => { start(chats, cnt + 1); }, 100);
 		}
 
 		// what to answer back?
-		let chatFn
+		let chatFn;
 
 		for (const key in Object.keys(commands)) {
 			if (lastMsg.startsWith(key)) {
@@ -211,14 +211,14 @@
 		
 		let sendText;
 
-		if (!chatFn) {
+		if (chatFn) {
 			sendText = chatFn({
 				chat: title,
-			})
+			});
 		} else {
 			ignoreLastMsg[title] = lastMsg;
 			//console.log(new Date(), 'new message ignored -> ', title, lastMsg);
-			return window.setTimeout(() => { start(chats, cnt + 1) }, 100);
+			return window.setTimeout(() => { start(chats, cnt + 1); }, 100);
 		}
 
 		console.log(new Date(), 'new message to process -> ', title, lastMsg);
@@ -227,14 +227,14 @@
 		if (!processLastMsgOnChat){
 			selectChat(chat, () => {
 				sendMessage(chat, sendText.trim(), () => {
-					window.setTimeout(() => { start(chats, cnt + 1) }, 1000);
+					window.setTimeout(() => { start(chats, cnt + 1); }, 1000);
 				});
-			})
+			});
 		} else {
 			sendMessage(null, sendText.trim(), () => {
-				window.setTimeout(() => { start(chats, cnt + 1) }, 1000);
+				window.setTimeout(() => { start(chats, cnt + 1); }, 1000);
 			});
 		}
-	}
+	};
 	start();
-})()
+})();
